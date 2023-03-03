@@ -203,47 +203,7 @@ class Utility extends CI_Model
 		return $encrypted_string;
 	}
 
-	public function uploadFile()
-	{
-
-		if (isset($_POST['submit']) && !empty($_FILES['files']['name'])) {
-			$fileCount = count($_FILES['files']['name']);
-			for ($i = 0; $i < $fileCount; $i++) {
-				$_FILES['file']['name'] = $_FILES['files']['name'][$i];
-				$_FILES['file']['type'] = $_FILES['files']['type'][$i];
-				$_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
-				$_FILES['file']['error'] = $_FILES['files']['error'][$i];
-				$_FILES['file']['size'] = $_FILES['files']['size'][$i];
-
-				//file upload configuration
-				$config['upload_path'] = 'uploads/';
-				$config['allowed_types'] = 'gif|jpg|png';
-
-				//load  upload library
-				$this->load->library('upload', $config);
-				$this->upload->initialize($config);
-
-				//upload file to server
-				if ($this->upload->do_upload('file')) {
-					//uploaded file data
-					$fileData = $this->upload->data();
-					$uploadData[$i]['image_url'] = base_url() . './uploads/' . $fileData['file_name'];
-				}
-			}
-
-			if (!empty($uploadData)) {
-				$dataa = array();
-				for ($i = 0; $i < 4; $i++) {
-					@$dataa[$i] = $uploadData[$i]["image_url"];
-				}
-
-
-			}
-			return $dataa[0];
-		}
-	}
-
-	public function uploadFile2($path = 'uploads/', $name = 'files')
+	public function uploadFile($path = 'uploads/', $name = 'files')
 	{
 
 		if (isset($_POST['submit']) && !empty($_FILES[$name]['name'])) {
@@ -283,15 +243,6 @@ class Utility extends CI_Model
 		}
 	}
 
-
-	public function getPerson($table,$id,$filed='id')
-	{
-		$this->db->where($filed,$id);
-		$res=$this->db->get($table)->row()->fullname;
-		if ($res){
-			return $res;
-		}else return false;
-	}
 	public function UpdateStatus($view, $table, $joiner, $field, $field2,$updateTable,$updateStatus,$redirect,$fieldID='id', $option = null, $option2 = null,$joiner2 = null,$field3 = null,$field4 = null,$field5 = null,$img=null)
 	{
 		$this->db->select('*,' . $option . ',' . $option2 );
@@ -336,45 +287,6 @@ class Utility extends CI_Model
 			redirect($redirect);
 		}
 	}
-
-	public function publish($field,$val,$field2,$table,$redirect)
-	{
-
-
-		if (isset($_POST['id_publish'])){
-			$id= $this->input->post('id_publish');
-			$this->db->set($field,$val);
-			$this->db->where($field2,$id);
-			$res=$this->db->update($table);
-			if ($res){
-				redirect($redirect);
-			}
-		}
-	}
-
-
-	public function see($table,$id,$idField,$field,$updateField)
-	{
-		$this->db->set($field,$updateField);
-		$this->db->where($idField,$id);
-		$res=$this->db->update($table);
-		if ($res){
-			return true;
-		}else return  false;
-	}
-	public function getRemaining($table,$field,$condition,$field2=null,$condition2=null)
-	{
-		$this->db->select('COUNT(*) as c');
-		$this->db->where($field,$condition);
-		if ($field2){
-			$this->db->where($field2,$condition2);
-
-		}
-		$res=$this->db->get($table)->row()->c;
-		if ($res){
-			return $res;
-		}else return  0;
-	}
 	public function getJOin($table, $joiner, $field, $field2, $option = null, $option2 = null, $option3 = null, $option4 = null,$data2=null)
 	{
 		$this->db->select('*,' . $option . ',' . $option2 . ',' . $option3 . ',' . $option4);
@@ -383,26 +295,6 @@ class Utility extends CI_Model
 		$this->db->join($joiner, $table . '.' . $field . '=' . $joiner . '.' . $field2);
 		$data = $this->db->get()->result_array();
 		return $data;
-	}
-	public function getJOin2($table, $joiner, $field, $field2, $option = null, $option2 = null, $option3 = null, $option4 = null,$data2=null)
-	{
-		$this->db->select('*,' . $option . ',' . $option2 . ',' . $option3 . ',' . $option4);
-		$this->db->from($table);
-		$this->db->join($joiner, $table . '.' . $field . '=' . $joiner . '.' . $field2);
-		$data = $this->db->get()->result_array();
-		return $data;
-	}
-	
-
-	function generateGiftCode($length = 10)
-	{
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$charactersLength = strlen($characters);
-		$randomString = '';
-		for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[rand(0, $charactersLength - 1)];
-		}
-		return $randomString;
 	}
 
 	public function getWithDate($table,$id,$start,$end,$field1,$field2,$field_id)
