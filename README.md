@@ -9,7 +9,7 @@ Copy the Utility.php file to the application/models directory in your CodeIgnite
 Create an instance of the Utility class in your controller or wherever you want to use it. Example: $this->load->model('Utility');
 
 ## Functions:
-`public function add($view, $info, $table, $redirectPage, $data = null, $data2 = array(), $data3 = array(), $data4 = array(), $path = 'uploads/', $path2'uploads/', $name = 'files', $name2 = 'files2')`
+``` php public function add($view, $info, $table, $redirectPage, $data = null, $data2 = array(), $data3 = array(), $data4 = array(), $path = 'uploads/', $path2'uploads/', $name = 'files', $name2 = 'files2')```
 
 This function is used to add data to the database. It takes several parameters:
 
